@@ -1,0 +1,61 @@
+/**
+  ******************************************************************************
+  * @file    main.c
+  * @author  Ac6
+  * @version V1.0
+  * @date    01-December-2013
+  * @brief   Default main function.
+  ******************************************************************************
+*/
+
+#include <stdio.h>
+#include "stm32f4xx.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+
+TaskHandle_t xTaskHandle1=NULL;
+TaskHandle_t xTaskHandle2=NULL;
+
+//Task Handler prototypes
+void vTask1_handler(void *params);
+void vTask2_handler(void *params);
+
+//used for semi-hosting
+extern void initialise_monitor_handles();
+
+int main(void)
+{
+	//used for semi-hosting
+	initialise_monitor_handles();
+	// Reset the RCC to 16MHz
+	RCC_DeInit();
+	//Update the SystemCoreClock variable
+	SystemCoreClockUpdate();
+
+	//create 2 tasks
+	xTaskCreate( vTask1_handler, "Task-1", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle1 );
+	xTaskCreate( vTask2_handler, "Task-2", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle2 );
+
+	// Start the scheduler
+	vTaskStartScheduler();
+
+	//Scheduler will never return so never fall in these section here
+
+	for(;;);
+}
+
+void vTask1_handler(void *params)
+{
+	while(1)
+	{
+		printf("Hello World from Task1\n");
+	}
+}
+
+void vTask2_handler(void *params)
+{
+	while(1){
+		printf("Hello World from Task2\n");
+	}
+}

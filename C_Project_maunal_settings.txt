@@ -1,0 +1,24 @@
+New C project
+use default location
+Ac6 STM32 MCU Project
+next
+next
+series: STM32F401xxBoard: NUCLEO - F401RE
+
+
+MCU GCC Compiler/Includes:
+
+"${workspace_loc:/${ProjName}/Third-Party/FreeRTOS/org/Source/portable/GCC/ARM_CM4F}"
+"${workspace_loc:/${ProjName}/Third-Party/SEGGER/Config}"
+"${workspace_loc:/${ProjName}/Third-Party/SEGGER/OS}"
+"${workspace_loc:/${ProjName}/Third-Party/SEGGER/SEGGER}"
+"${workspace_loc:/${ProjName}/CMSIS/core}"
+"${workspace_loc:/${ProjName}/Config}"
+"${workspace_loc:/${ProjName}/Third-Party/FreeRTOS/org/Source/include}"
+"${workspace_loc:/${ProjName}/CMSIS/device}"
+"${workspace_loc:/${ProjName}/inc}"
+"${workspace_loc:/${ProjName}/StdPeriph_Driver/inc}"
+
+MCU GCC Compiler/Preprocessor: (add)
+STM32F401xx
+USE_STDPERIPH_DRIVER
