@@ -51,6 +51,8 @@ int main(void)
 
 	//LED task create
 	xTaskCreate(led_task_handler, "LED-TASK", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+	//Button task create
+	xTaskCreate(button_task_handler, "BUTTON-TASK", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
 	//start the scheduler
 	vTaskStartScheduler();
@@ -75,23 +77,21 @@ void led_task_handler(void *params)
 	}
 }
 
-void button_handler(void *params)
+void button_task_handler(void *params)
 {
-	//making the exor operation with 1 means "toggle status flag"
-	button_status_flag ^=1;
-}
-
-
-void printmsg(char *msg)
-{
-	for(uint32_t i=0; i < strlen(msg); i++ )
+	while(1)
 	{
-		//whait until transmit buffer register is SET
-		while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) != SET );
-		//actually send the current char of the msg
-		USART_SendData(USART2, msg[i]);
+		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13) )
+		{
+			//set button NOT-pressed
+			button_status_flag = NOT_PRESSED;
+		}
+		else
+		{
+			//set button pressed
+			button_status_flag = PRESSED;
+		}
 	}
-
 }
 
 static void prvSetupUart(void)
@@ -135,7 +135,6 @@ static void prvSetupGPIO()
 {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
 	//This function is board specific
 	GPIO_InitTypeDef led_init, button_init;
@@ -154,21 +153,6 @@ static void prvSetupGPIO()
 	button_init.GPIO_Speed = GPIO_Low_Speed;
 	GPIO_Init(GPIOC, &button_init);
 
-	//Interrupt configuration for the button (PC13)
-	//configure the EXTI line (syscfg settings)
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
-
-	//configure EXTI line 13
-	EXTI_InitTypeDef exti_init;
-	exti_init.EXTI_Line =  EXTI_Line13 ;
-	exti_init.EXTI_Mode = EXTI_Mode_Interrupt;
-	exti_init.EXTI_Trigger = EXTI_Trigger_Falling;
-	exti_init.EXTI_LineCmd = ENABLE ;
-	EXTI_Init(&exti_init);
-
-	//NVIC settings (IRQ settings for selected EXTI line(13) wich in STM32F401RE are into EXTI15_10_IRQn group)
-	NVIC_SetPriority(EXTI15_10_IRQn, 5);
-	NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 
@@ -176,18 +160,4 @@ static void prvSetupHardware(void)
 {
 	prvSetupGPIO();
 	prvSetupUart();
-}
-
-//this will overrite the .weak definition that can be found in startup/startup_stm32.s
-void EXTI15_10_IRQHandler(void)
-{
-	//segger systemview command to trace the interrupt visually
-	traceISR_ENTER();
-
-	// Clear the interrupt pending bit of the EXTI line (13)
-	EXTI_ClearITPendingBit(EXTI_Line13);
-	button_handler(NULL);
-
-	//segger systemview command to trace the interrupt visually
-	traceISR_EXIT();
 }

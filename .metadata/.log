@@ -1025,3 +1025,25 @@ java.lang.NullPointerException
 
 !ENTRY org.eclipse.cdt.core 1 0 2021-03-10 15:08:59.903
 !MESSAGE Indexed 'STM32_FreeRTOS_Led_and_Button_IT' (59 sources, 129 headers) in 2,11 sec: 11.016 declarations; 44.891 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.ui.ide 4 4 2021-03-12 08:28:29.240
+!MESSAGE Problems occurred refreshing the selected resources.
+!SUBENTRY 1 org.eclipse.core.resources 4 567 2021-03-12 08:28:29.242
+!MESSAGE The project description file (.project) for 'STM32_FreeRTOS_Led_and_Button_IT' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.ui.ide 2 4 2021-03-12 08:28:55.729
+!MESSAGE Problems occurred closing the selected resources.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2021-03-12 08:28:55.729
+!MESSAGE The project description file (.project) for 'STM32_FreeRTOS_Led_and_Button_IT' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-12 08:31:25.249
+!MESSAGE Indexed 'STM32_FreeRTOS_Led_and_Button_IT' (1 sources, 0 headers) in 0,01 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-12 08:34:27.558
+!MESSAGE Indexed 'STM32_FreeRTOS_Led_and_Button_IT' (4 sources, 98 headers) in 1,34 sec: 5.841 declarations; 8.328 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-12 08:37:14.265
+!MESSAGE Indexed 'STM32_FreeRTOS_Led_and_Button_IT' (4 sources, 98 headers) in 1,42 sec: 5.841 declarations; 8.328 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-12 08:38:12.460
+!MESSAGE Indexed 'STM32_FreeRTOS_Led_and_Button_IT' (4 sources, 98 headers) in 1,01 sec: 5.841 declarations; 8.328 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)

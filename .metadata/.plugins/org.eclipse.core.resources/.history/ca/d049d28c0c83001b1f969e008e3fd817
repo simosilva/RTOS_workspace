@@ -51,6 +51,8 @@ int main(void)
 
 	//LED task create
 	xTaskCreate(led_task_handler, "LED-TASK", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+	//Button task create
+	xTaskCreate(button_task_handler, "BUTTON-TASK", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
 	//start the scheduler
 	vTaskStartScheduler();
@@ -75,23 +77,21 @@ void led_task_handler(void *params)
 	}
 }
 
-void button_handler(void *params)
+void button_task_handler(void *params)
 {
-	//making the exor operation with 1 means "toggle status flag"
-	button_status_flag ^=1;
-}
-
-
-void printmsg(char *msg)
-{
-	for(uint32_t i=0; i < strlen(msg); i++ )
+	while(1)
 	{
-		//whait until transmit buffer register is SET
-		while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) != SET );
-		//actually send the current char of the msg
-		USART_SendData(USART2, msg[i]);
+		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13) )
+		{
+			//set button NOT-pressed
+			button_status_flag = NOT_PRESSED;
+		}
+		else
+		{
+			//set button pressed
+			button_status_flag = PRESSED;
+		}
 	}
-
 }
 
 static void prvSetupUart(void)
