@@ -1135,3 +1135,21 @@ org.eclipse.core.runtime.CoreException: Cannot create or restore 'inc' because i
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
 !SUBENTRY 1 org.eclipse.ltk.core.refactoring 4 0 2021-03-12 11:15:38.371
 !MESSAGE Cannot create or restore 'inc' because it already exists.
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 09:58:11.810
+!MESSAGE Indexed 'STM32FreeRTOS_Task_Delete' (1 sources, 0 headers) in 0,01 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 11:35:30.492
+!MESSAGE Indexed 'STM32_FreeRTOS_Task_Priority' (1 sources, 0 headers) in 0,011 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 11:37:25.330
+!MESSAGE Indexed 'STM32_FreeRTOS_Task_Priority' (59 sources, 129 headers) in 2,23 sec: 11.018 declarations; 44.925 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 11:37:46.697
+!MESSAGE Indexed 'STM32_FreeRTOS_Task_Priority' (59 sources, 129 headers) in 1,75 sec: 11.018 declarations; 44.925 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 11:39:32.352
+!MESSAGE Indexed 'STM32FreeRTOS_Task_Delete' (59 sources, 129 headers) in 1,78 sec: 11.028 declarations; 44.957 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 12:10:53.873
+!MESSAGE Indexed 'STM32_FreeRTOS_Task_Priority' (59 sources, 129 headers) in 2,12 sec: 11.036 declarations; 45.010 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
