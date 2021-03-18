@@ -194,4 +194,3 @@ void rtos_delay(uint32_t delay_in_ms)
 	while(xTaskGetTickCount() < (current_tick_count + delay_in_ticks));
 
 }
-

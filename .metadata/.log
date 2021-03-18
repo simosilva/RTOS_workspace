@@ -1153,3 +1153,30 @@ org.eclipse.core.runtime.CoreException: Cannot create or restore 'inc' because i
 
 !ENTRY org.eclipse.cdt.core 1 0 2021-03-15 12:10:53.873
 !MESSAGE Indexed 'STM32_FreeRTOS_Task_Priority' (59 sources, 129 headers) in 2,12 sec: 11.036 declarations; 45.010 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 16:19:06.269
+!MESSAGE Indexed 'STM32_FreeRTOS_vTaskDelay' (1 sources, 0 headers) in 0,007 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 16:21:22.110
+!MESSAGE Indexed 'STM32_FreeRTOS_vTaskDelay' (59 sources, 129 headers) in 2,67 sec: 11.036 declarations; 45.010 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 16:48:12.526
+!MESSAGE Indexed 'STM32_FreeRTOS_Idle_Hook_Power_Saving' (1 sources, 0 headers) in 0,005 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 16:49:43.371
+!MESSAGE Indexed 'STM32_FreeRTOS_Idle_Hook_Power_Saving' (59 sources, 129 headers) in 2,37 sec: 11.019 declarations; 44.913 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-15 17:07:50.234
+!MESSAGE Indexed 'STM32_FreeRTOS_Idle_Hook_Power_Saving' (59 sources, 129 headers) in 1,96 sec: 11.025 declarations; 44.915 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-16 16:12:42.500
+!MESSAGE Indexed 'STM32_FreeRTOS_Queue_Processing' (1 sources, 34 headers) in 0,257 sec: 1.090 declarations; 1.719 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-16 16:13:46.564
+!MESSAGE Indexed 'STM32_FreeRTOS_Queue_Processing' (59 sources, 129 headers) in 2,02 sec: 11.023 declarations; 44.915 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-18 11:42:02.422
+!MESSAGE Indexed 'STM32_FreeRTOS_Bin_Sema_Task' (1 sources, 0 headers) in 0,019 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-18 11:42:28.065
+!MESSAGE Indexed 'STM32_FreeRTOS_Cnt_Sema_Task' (1 sources, 0 headers) in 0,007 sec: 7 declarations; 12 references; 2 unresolved inclusions; 0 syntax errors; 4 unresolved names (17%)

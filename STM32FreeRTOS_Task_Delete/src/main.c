@@ -31,6 +31,7 @@ static void prvSetupHardware(void);
 static void prvSetupUart(void);
 static void prvSetupGPIO(void);
 void printmsg(char *msg);
+void rtos_delay(uint32_t delay_in_ms);
 
 //task prototypes
 void vTask1_handler(void *params);
@@ -73,7 +74,6 @@ int main(void)
 
 void vTask1_handler(void *params)
 {
-	TickType_t current_tick =0;
 
 	sprintf(usr_msg, "Task-1 is running\r\n");
 	printmsg(usr_msg);
@@ -91,7 +91,6 @@ void vTask1_handler(void *params)
 
 void vTask2_handler(void *params)
 {
-	TickType_t current_tick =0;
 
 	sprintf(usr_msg, "Task-2 is running\r\n");
 	printmsg(usr_msg);

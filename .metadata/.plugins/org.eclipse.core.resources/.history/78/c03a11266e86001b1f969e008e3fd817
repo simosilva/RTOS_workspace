@@ -1,0 +1,243 @@
+/**
+  ******************************************************************************
+  * @file    main.c
+  * @author  Ac6
+  * @version V1.0
+  * @date    01-December-2013
+  * @brief   Default main function.
+  ******************************************************************************
+*/
+
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h> //for memset
+#include "stm32f4xx.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+//if timers used, make sure #define configUSE_TIMERS 1 in FreeRTOSConfig.h
+#include "timers.h"
+
+#define FALSE 0
+#define TRUE 1
+
+
+//functions prototypes
+static void prvSetupHardware(void);
+static void prvSetupUart(void);
+static void prvSetupGPIO(void);
+void printmsg(char *msg);
+void rtos_delay(uint32_t delay_in_ms);
+
+//task prototypes
+void vTask1_menu_display(void *params);
+void vTask2_cmd_handling(void *params);
+void vTask3_cmd_processing(void *params);
+void vTask4_uart_write(void *params);
+
+//global space for some variables
+char usr_msg[250]={0};
+
+//task handles
+TaskHandle_t xTaskHandle1=NULL;
+TaskHandle_t xTaskHandle2=NULL;
+TaskHandle_t xTaskHandle3=NULL;
+TaskHandle_t xTaskHandle4=NULL;
+
+//queue handles
+QueueHandle_t command_queue = NULL;
+
+//command structure
+typedef struct APP_CMD
+{
+	uint8_t COMMAND_NUM;
+	uint8_t COMMAND_ARGS[10];
+}APP_CMD_t;
+
+
+int main(void)
+{
+	//for this project, the #define configUSE_IDLE_HOOK	is set to 1 in the FreeRTOSConfig.h
+
+	DWT -> CTRL |= (1 << 0);//Enable CYCCNT in DWT_CTRL
+
+	// Reset the RCC to 16MHz
+	RCC_DeInit();
+	//Update the SystemCoreClock variable
+	SystemCoreClockUpdate();
+
+	prvSetupHardware();
+
+	sprintf(usr_msg, "This is Queue Command Processing Demo\r\n");
+	printmsg(usr_msg);
+
+	//Start recording
+	SEGGER_SYSVIEW_Conf();
+	SEGGER_SYSVIEW_Start();
+
+	//create task-1
+	xTaskCreate(vTask1_menu_display, "TASK1-MENU", 500, NULL, 1, &xTaskHandle1);
+	//create task-2
+	xTaskCreate(vTask2_cmd_handling, "TASK2-CMD-HANDLING", 500, NULL, 1, &xTaskHandle2);
+	//create task-3
+	xTaskCreate(vTask3_cmd_processing, "TASK3-CMD-PROCESS", 500, NULL, 1, &xTaskHandle3);
+	//create task-4
+	xTaskCreate(vTask4_uart_write, "TASK4-UART-WRITE", 500, NULL, 1, &xTaskHandle4);
+
+	//create commands queue
+	//the queue has 10 elements, for each elements the space of the just created APP_CMD_t datatype is reserved
+	command_queue = xQueueCreate(10, sizeof(APP_CMD_t*));
+	//these version with the pointers is better than "xQueueCreate(10, sizeof(APP_CMD_t));"
+	//in 32 bit system each pointer consumes 32 bits, just 4 bytes
+	//the pointer version consumes 4*10bytes, the other consumes 10*11bytes in the heap memory since the queue is created with a malloc
+
+	//start the scheduler
+	vTaskStartScheduler();
+
+	for(;;);
+}
+
+void vTask1_menu_display(void *params)
+{
+	while (1)
+	{
+		sprintf(usr_msg,"Status of the LED is %d\r\n", GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_5));
+		printmsg(usr_msg);
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
+}
+
+void vTask2_cmd_handling(void *params)
+{
+	while (1)
+		{
+			GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
+			vTaskDelay(pdMS_TO_TICKS(1000));
+		}
+}
+
+void vTask3_cmd_processing(void *params)
+{
+
+}
+
+void vTask4_uart_write(void *params)
+{
+
+}
+
+void printmsg(char *msg)
+{
+	for(uint32_t i=0; i < strlen(msg); i++ )
+	{
+		//whait until transmit buffer register is SET
+		while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) != SET );
+		//actually send the current char of the msg
+		USART_SendData(USART2, msg[i]);
+	}
+
+}
+
+
+
+static void prvSetupUart(void)
+{
+	GPIO_InitTypeDef gpio_uart_pins;
+	USART_InitTypeDef uart2_init;
+
+	//Enable USART2
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE );
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE );
+
+	//PA2 UART2_TX, PA3 UART2_RX
+	//zeroing all the data in the structure since are in local variables and can also be garbage if not initialized
+	memset(&gpio_uart_pins, 0, sizeof(gpio_uart_pins));
+	//Alternate functionality
+	gpio_uart_pins.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;
+	gpio_uart_pins.GPIO_Mode = GPIO_Mode_AF;
+	gpio_uart_pins.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOA, &gpio_uart_pins);
+
+	//AF (Alternte Functionality) for the pins
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_USART2); //PA2
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_USART2); //PA3
+
+	//zeroeas all the data in the structure since are in local variables and can also be garbage if not initialized
+	memset(&uart2_init, 0, sizeof(uart2_init));
+	//UART parameter initialization
+	uart2_init.USART_BaudRate = 115200;
+	uart2_init.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	uart2_init.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
+	uart2_init.USART_Parity = USART_Parity_No;
+	uart2_init.USART_StopBits = USART_StopBits_1;
+	uart2_init.USART_WordLength = USART_WordLength_8b;
+	USART_Init(USART2, &uart2_init);
+
+	//Enable the USART2 Peripheral
+	USART_Cmd(USART2, ENABLE);
+}
+
+static void prvSetupGPIO()
+{
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+	//This function is board specific
+	GPIO_InitTypeDef led_init, button_init;
+
+	led_init.GPIO_Mode = GPIO_Mode_OUT;
+	led_init.GPIO_OType = GPIO_OType_PP;
+	led_init.GPIO_Pin = GPIO_Pin_5;
+	led_init.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	led_init.GPIO_Speed = GPIO_Low_Speed;
+	GPIO_Init(GPIOA, &led_init);
+
+	button_init.GPIO_Mode = GPIO_Mode_IN;
+	button_init.GPIO_OType = GPIO_OType_PP;
+	button_init.GPIO_Pin = GPIO_Pin_13;
+	button_init.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	button_init.GPIO_Speed = GPIO_Low_Speed;
+	GPIO_Init(GPIOC, &button_init);
+
+	//Interrupt configuration for the button (PC13)
+	//configure the EXTI line (syscfg settings)
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
+
+	//configure EXTI line 13
+	EXTI_InitTypeDef exti_init;
+	exti_init.EXTI_Line =  EXTI_Line13 ;
+	exti_init.EXTI_Mode = EXTI_Mode_Interrupt;
+	exti_init.EXTI_Trigger = EXTI_Trigger_Falling;
+	exti_init.EXTI_LineCmd = ENABLE ;
+	EXTI_Init(&exti_init);
+
+	//NVIC settings (IRQ settings for selected EXTI line(13) wich in STM32F401RE are into EXTI15_10_IRQn group)
+	NVIC_SetPriority(EXTI15_10_IRQn, 5);
+	NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+}
+
+static void prvSetupHardware(void)
+{
+	prvSetupGPIO();
+	prvSetupUart();
+}
+
+void vApplicationIdleHook(void)
+{
+	//put processor in normal sleep mode
+	//we use CMSIS macro using __ and WFI, which stands for Wait For Interrupt
+	__WFI();
+	//this will save lot of energy, from 6-9mA to 2-5mA  ^(*.*)^
+}
+
+void rtos_delay(uint32_t delay_in_ms)
+{
+	uint32_t current_tick_count = xTaskGetTickCount();
+
+	uint32_t delay_in_ticks = (delay_in_ms * configTICK_RATE_HZ) /1000;
+
+	while(xTaskGetTickCount() < (current_tick_count + delay_in_ticks));
+
+}
