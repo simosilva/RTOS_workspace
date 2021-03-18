@@ -71,6 +71,7 @@ int main(void)
 
 	//Scheduler will never return so never fall in these section here
 
+  // Hello Word ADV 16/03/2021
 	for(;;);
 }
 
