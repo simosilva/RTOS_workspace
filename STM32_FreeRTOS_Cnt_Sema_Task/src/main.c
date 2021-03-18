@@ -123,7 +123,7 @@ static void vPeriodicTask( void *pvParameters )
 	{
 		/* This task is just used to 'simulate' an interrupt.  This is done by
 		periodically generating a software interrupt. */
-		vTaskDelay( pdMS_TO_TICKS(500) );
+		vTaskDelay( pdMS_TO_TICKS(1000) );
 
 		/* Generate the interrupt, printing a message both before hand and
 		afterwards so the sequence of execution is evident from the output. */
